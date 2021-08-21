@@ -68,7 +68,7 @@ char **create_env(char *envp[])
  */
 void _env(char **myenv)
 {
-  int i;
+ int i;
 
   for (i = 0; myenv[i] != NULL; i++)
     {
