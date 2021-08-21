@@ -10,7 +10,7 @@ The "Simple_shell" is a program that can be compiled and launched from the comma
 
 1. Git clone this respository to your local directory.
 
-       $ git clone https://github.com/diegolopezq95/simple_shell.git
+       $ git clone git@github.com:Kuda-ux/simple_shell.git
   
 2. Compile the program.
 
@@ -152,4 +152,4 @@ help error:
      #cisfun$
 
 ## Authors
-Kudakwashe Rapozo <kudakwasher8@yahoo.com> and Emmanuel Mwangi <>.
+Kudakwashe Rapozo <kudakwasher8@yahoo.com> and Emmanuel Mwangi <manumunubi@gmail.com>.
