@@ -259,13 +259,13 @@ The \fBsimple_shell\fP history file
 .PD
 
 .SH AUTHORS
-Bezaleel Olakunori, ALX
+Kudakwashe Rapozo, ALX
 .br
-bezaleeloci@gmail.com
+kudakwasher8@yahoo.com
 .PP
-Elmahdi Mamoun, ALX
+Emmanuel Mwangi, ALX
 .br
-mamounelmahdi1962@gmail.com
+manumunubi@gmail.com
 
 .SH SEE ALSO
 .PD 0
@@ -276,5 +276,5 @@ mamounelmahdi1962@gmail.com
 .SH BUG REPORTS
 Report
 .SB simple_shell
-bugs to <https://github.com/Elmahdi1962/simple_shell/issues>
+bugs to <https://github.com/Kuda-ux/simple_shell/issues>
 
