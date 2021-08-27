@@ -1,6 +1,20 @@
 # Making a Basic Unix Shell
 
-### … What you should know before you start making your own shell
+### … What you should know before you start making your own shellWhat you should know before you start making your own shell
+
+
+Recently, a friend of mine and I were tasked with creating a simple shell in C. At first, I was puzzled at how we would go about doing such a thing. It wasn't until we decided to carefully analyze what a shell really does that the task became clearer to us.
+
+I would be providing a basic explanation of the inner workings of a Unix shell with the hope that it gives you a better understanding of what you must do before you create your own basic shell.
+
+Before we start, we need to understand what the purpose of a shell is.
+
+A shell's purpose is to provide the user access to the services that the underlying operating system provides. This could include creating files, viewing files and folders in a directory, launching programs and so much more.
+Before the shell can do any of those things, it must be launched by either the operating system or the user.
+
+After a shell program is run, it performs its startup routines. Some of the startup routines could include reading the history or profile files (if there are any), detecting whether the terminal is interactive or not, etc. After that, the shell prints the prompt, and waits for input from the user using the `read()` system call until it receives a newline character when the user hits the enter or return key. I would be using the line of input `ls -l *.c` as a reference throughout this post.
+
+After the user types some input and hits the return key, the shell tries to convert the input into a structure that allows it to properly execute the commands the user typed
 
 
 Recently, a friend of mine and I were tasked with creating a simple shell in C. At first, I was puzzled at how we would go about doing such a thing. It wasn't until we decided to carefully analyze what a shell really does that the task became clearer to us.
@@ -46,6 +60,6 @@ After resolving the command to a path the shell just needs to execute the expect
 
 To prevent the shell from terminating after executing the file using the **execve()** system call, the shell has to fork its current process and wait for the child process to terminate or finish executing. The fork and wait can be done using the **fork()** and **wait()** system calls. The shell can check if the child process failed (it wouldn't return if it succeeded) and retrieve the exit status using the WIFEXITED and WEXITSTATUS macros. A successfully executed file has an exit status of 0.
 
-You can find the entire source code of the shell we made [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FKuda-ux%2Fsimple_shell) on GitHub. The shell performs some simple operations you would expect a shell to perform. It runs some built-in commands, performs variable expansions, executes programs and can read lines of commands from a text file.
+You can find the entire source code of the shell we made [here](https://github.com/Kuda-ux/simple_shell) on GitHub. The shell performs some simple operations you would expect a shell to perform. It runs some built-in commands, performs variable expansions, executes programs and can read lines of commands from a text file.
 
 I hope this has given you a piece of short information on what you need to know before creating your own shell.
