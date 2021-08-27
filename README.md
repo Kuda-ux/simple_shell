@@ -1,13 +1,13 @@
 <h1 style="text-align: center">Simple Shell</h1>
 
-![Repo size](https://img.shields.io/github/repo-size/Elmahdi1962/simple_shell)
-![Code size](https://img.shields.io/github/languages/code-size/Elmahdi1962/simple_shell.svg)
+![Repo size](https://img.shields.io/github/repo-size/Kuda-ux/simple_shell)
+![Code size](https://img.shields.io/github/languages/code-size/Kuda-ux/simple_shell.svg)
 
 ## Description
 
 This program is a simple Unix shell implemented in __C__ using the `gnu89` standard.
 
-The purpose of this project was to demonstrate our ([Bezaleel Olakunori](https://github.com/B3zaleel) & [Elmahdi Mamoun](https://github.com/Elmahdi1962)) understanding of a variety of programming concepts and low-level system functionalities.
+The purpose of this project was to demonstrate our ([Emmanuel Mwangi](https://github.com/Emmanuel-Munubi) & [Kudakwashe Rapozo](https://github.com/Kuda-ux)) understanding of a variety of programming concepts and low-level system functionalities.
 <br/>
 
 Here's a screenshot of our simple shell in action.
