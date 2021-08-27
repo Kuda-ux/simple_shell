@@ -2,7 +2,6 @@
 
 ### … What you should know before you start making your own shell
 
-<img src="./img-0.png"/>
 
 Recently, a friend of mine and I were tasked with creating a simple shell in C. At first, I was puzzled at how we would go about doing such a thing. It wasn't until we decided to carefully analyze what a shell really does that the task became clearer to us.
 
