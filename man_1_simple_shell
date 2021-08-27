@@ -1,119 +1,280 @@
-.\" Manpage for Simple_Shell
-.TH man 1 "21 August 2021 "1.0" "Manual page for Simple_Shell"
+." Process this file with
+." groff -man -Tascii man_1_simple_shell
+." Render on terminal with
+." man ./man_1_simple_shell or viewman
+."
+.TH SIMPLE_SHELL 1 "2021 August 26" "v 1.0" "General Commands Manual"
 
-.SH NAME
-.B \fBSimple_Shell\fR - Command language interpreter
-
+.SH  NAME
+simple_shell \- Simple command interpreter (shell)
 .SH SYNOPSIS
-\fB./hsh\fR
+.B simple_shell
+[file]
 
 .SH DESCRIPTION
-Command language interpreter that executes commands read from the standard input or from a file.
+SImple SHell is a command language interpreter that executes
+commands read from the standard input or from a file.
 
-.SH INVOCATION
-An interactive shell is one started without non-option arguments, just running \fB./hsh\fR. Otherwise, when is started non-interactively, to run a shell script, for example, the shell reads and execute the next command \fBecho "pwd" | ./hsh\fR.
+.SH ARGUMENTS
+The only argument that should be supplied to the shell
+is the name of a file. When this happens,
+the shell reads and	executes commands from this	file, then exits.
+The shell's exit status is the exit status of the last command
+executed in the script. If no commands are executed, the exit
+status is 0. An attempt is made to open the file in
+the current directory.
+." and, if no file is found,	then the shell searches	the
+." directories	in PATH	for the	script.
 
-.SH COMMAND EXECUTION
-The first thing Simple_Shell does is to read the argument input form the user, after that the line read is split into tokens. After that, the Simple_Shell looks in each token for the executable in paths specified by the PATH environment variable, then forks new process and executes it's code. Finally, prints the output and exits the prompt, sends the wait signal and the parent process terminates.
+.SH DEFINITIONS
+.PP
+The following definitions are used throughout the rest of this
+document.
+.PD 0
+.TP
+.B blank
+A space or tab.
+.TP
+.B word
+A sequence of characters considered as a single unit by the shell.
+.TP
+.B name
+A
+.I word
+consisting only of alphanumeric characters and underscores, and beginning with an alphabetic character or an underscore.
+.TP
+.B control operator
+A
+.I token
+that performs a control function. It is one of the
+following symbols:
+.if t \fB|| && ; <newline>
 
-.SH BUILT-IN COMMANDS
-Each builtin command is executed directly in the shell
+.SH SHELL GRAMMAR
+.SS Simple Commands
+A
+.I simple command
+is a sequence of
+.B blank
+-separated words that are terminated by a
+.I control operator
+. The first word specifies the command to be
+executed, and is passed as argument zero. The
+remaining words are passed as arguments to the
+invoked command.
+
+.Br
+The return value of a
+.I simple command
+is its exit status or 128+
+.I n
+if the command is terminated by signal
+.I n
+
+.SH COMMENTS
+In a non-interactive shell or an interactive shell, a word beginning
+with a
+.B #
+causes that word and all remaining characters on that line to be ignored.
+Comments are on by default.
+
+.SH QUOTING
+.I Quoting
+is used to remove the special meaning of certain characters or
+words to the shell, such as operators or whitespace.
+There are two types of quoting: matched single quotes,
+and matched double quotes.
+
+.SS Single Quotes
+Enclosing characters in single quotes preserves the literal meaning of all
+the characters (except single quotes, making it impossible to put
+single-quotes in a single-quoted string).
+
+.SS Double Quotes
+Enclosing characters within double quotes preserves the literal
+meaning of all characters except dollarsign as they're used to signify
+the start of a variable or special parameters like ? and $.
+
+.SH ALIASES
+An alias is a name and corresponding value set using the alias builtin command.
+Whenever a word is read, the shell
+checks the word to see if it matches an alias.
+If it does, it replaces it in the input stream with its value.
+For example, if there is an alias called
+"put"
+with the value
+.Dq "echo -e" ,
+then the input:
+.Pp
+.Dl put "\e[31mCool\e[0m" Aq return
+.Pp
+would become
+.Pp
+.Dl echo -e "\e[31mCool\e[0m" Aq return
+.Pp
+Aliases provide a convenient way for naive users to create shorthands for
+commands.
+They can also be used to create lexically obscure code.
+This use is discouraged.
+
+.SH SIGNALS
+When
+.B simple_shell
+is interactive, it catches and handles
+.B SIGINT
+(so that pressing Control+C does not kill an interactive shell).
+
+.SH HISTORY
+On startup, the history is initialized from the file .simple_shell_history in the $HOME directory.
+This file is truncated to
+contain no more than 4096 lines of command strings. When the shell startsup,
+the first line number is set to  the number of lines in the .simple_shell_history file modulo 4096
+(the history size).
+ If the history file is unwritable, the history is not saved.
+
+.SH SHELL BUILTIN COMMANDS
+This section lists some built-in commands, which are built-in because
+they are needed to perform some operations which cannot be performed
+by a different process.
 .TP
-.B \fBenv\fR - Display all the enviroment variables.
+\fBalias\fP [\fIname\fP[=\fI'value'\fP] ...]
+Running
+.B alias
+with no arguments prints the list of aliases in the form
+.I name=
+.I'value'
+. When arguments are supplied, an alias is defined for each
+.I name
+whose
+.I value
+is given. A trailing blank or control operator in
+.I value
+causes the next word to be checked for alias
+substitution when an alias is expanded. For each
+.I name
+in the argument list for which no
+.I value
+is supplied, the name and value of the alias is printed.
+.B Alias
+returns true unless a
+.I name
+is given for which no alias has been defined.
+
 .TP
-.B \fBcd [dir]\fR - Change the current directory to dir. The variable HOME is the default dir.
+\fBcd\fP [\fIdir\fP]
+Change the current directory to \fIdir\fP.
+If \fIdir\fP is not supplied, the value of the
+.SM
+.B HOME
+shell variable is the default.
+Any additional arguments following \fIdir\fP are ignored.
+An argument of
+.B \-
+switches
+.SM
+.B $OLDPWD
+with \fB$PWD\fP.
+If
+\fB\-\fP is the first argument, and the directory change is
+successful, the absolute pathname of the new working directory is
+written to the standard output.
+The return value is true if the directory was successfully changed;
+false otherwise.
+
 .TP
-.B \fBexit [status]\fR - Terminate the shell process with Ctrl+D (EOF) or with exit. Cause the shell to exit with a status of n.
+.B env
+Prints all the environment variables in the shell.
+
 .TP
-.B \fBhelp [pattern]\fR - Display helpful information about builtin commands. If pattern is specified, help gives detailed help on all commands matching pattern.
+\fBexit\fP [\fIstatus\fP]
+Cause the shell to exit
+with a status code of \fIstatus\fP.  If
+.I status
+is omitted, the exit status
+is that of the last command executed.
+
 .TP
-.B \fBpwd\fR - Print the absolute pathname of the current working directory.
+\fBhelp\fP [\fIBUILTIN\fP]
+Prints the help page of a builtin command \fIstatus\fP. If
+no arguments are provided, a short information about the
+program and built-in commands usage syntax
+are printed.
+If
+.I BUILTIN
+is not a built-in command or there are too many arguments, the
+return value is false and an error message is printed to the
+standard error output.
+
 .TP
-.B \fBunsetenv [variable]\fR - Remove an environment variable.
+\fBhistory\fP
+Displays all the lines of commands that have
+executed by the shell. Returns false if an argument is
+provided and prints some error to the standard error output.
+
+.TP
+\fBsetenv\fP \fIVARIABLE\fP \fIVALUE\fP
+Sets the environment variable with the name \fIVARIABLE\fP
+to have the value \fIVALUE\fP
+If
+.I VARIABLE
+is not a valid variable or there are too many or insufficient
+arguments, the return value is false and an error message is
+printed to the standard error output.
+
+.TP
+\fBunsetenv\fP \fIVARIABLE\fP
+Removes an environment variable with the name
+\fIVARIABLE\fP. No error is thrown if \fIVARIABLE\fP
+does not exist. Returns false if an argument isn't
+provided or there are too many arguments.
 
 .SH ENVIRONMENT
-Some environment variables
 .TP
-.B \fBHOME\fR - The home directory of the current user; the default argument for the cd builtin command.
+HOME
+This environment variable functions as the default argument for
+the cd builtin.
 .TP
-.B \fBPATH\fR - The search path for commands. It is a colon-separated list of directories in which the shell looks for commands.
+PATH
+The default serch path for executables.
 .TP
-.B \fBPWD\fR - The absolute pathname for the current directory.
+PS1
+The primary prompt string, which defaults to "$ ".
 .TP
-.B \fBOLDPWD\fR - The previous working directory as set by the cd command.
-
-.SH DELIMIT AND COMMENT COMMANDS
-Delimit commands are characters which will be used to split the string; Comment commands allow comments to be handled.
+PWD
+The logical value of the current working directory. This is set by
+the \fBcd\fP command.
 .TP
-.B \fB;\fR - The semicolon ( ; ) is used as a command separator that allows to run a command on a single line placing the semicolon between each command.
-.TP
-.B \fB#\fR - The command number ( # ) allows a word beginning with #  and all remaining characters on that line to be ignored.
+OLDPWD
+The previous logical value of the current working directory. This is set by
+the \fBcd\fP command.
 
 .SH FILES
+.PD 0
 .TP
-\fI_atoi.c\fR - function that gets sign and numbers of string
+.I /bin/simple_shell
+The \fBsimple_shell\fP executable
 .TP
-\fI_calloc.c\fR - function that allocates memory for an array
-.TP
-\fI_change.c\fR - functions that change the OLDPWD and PWD environment variables
-.TP
-\fI_comments.c\fR - function to handle the comments with the # command.
-.TP
-\fI_display_help.c\fR - functions that reads all builtins text files and prints it to POSIX stdout
-.TP
-\fI_envir.c\fR - functions to print the environment variables and create a copy of env
-.TP
-\fI_errors.c\fR - functions with the error message for each builtin
-.TP
-\fI_forky.c\fR - program that creates process and execute
-.TP
-\fI_gethome.c\fR - funtion to get the environment variable HOME
-.TP
-\fI_getline.c\fR - functions to read what the user writes
-.TP
-\fI_iscd.c\fR - functions to change the current directory of the process.
-.TP
-\fI_isexit.c\fR - functions that finds if line input is exit therefore process termination
-.TP
-\fI_ishelp.c\fR - functions to print the help of each builtin
-.TP
-\fI_noargv.c\fR - function to give shell form without filename as input
-.TP
-\fI_realloc.c\fR - function to change the size and copy the content
-.TP
-\fI_realloc2.c\fR - function to change the size and copy the content special case
-.TP
-\fI_signal.c\fR - function to handle SIGINT signal
-.TP
-\fI_str_concat.c\fR - function to create an array using malloc
-.TP
-\fI_strlen.c\fR - function that returns the length of a string
-.TP
-\fI_strtoky.c\fR - functions to cut a string into tokens depending of the delimit
-.TP
-\fI_unsetenv\fR - functions to remove an environment variable.
-.TP
-\fI_writerr.c\fR - functions to print the error for each builtin
-.TP
-\fI_yesargv.c\fR - function to give shell form with filename as input
-.TP
-\fIcheckbin.c\fR - functions to check if commands exist in the path
-.TP
-\fIfree_grid.c\fR - function to free a matrix
-.TP
-\fIman_1_simple_shell\fR - manual of simple_shell
-.TP
-\fIparsing.c\fR - functions that create an array of pointers depending of the delimit characters
-.TP
-\fIshell.h\fR - header file with all thr function prototypes
-.TP
-\fIstartshell.c\fR - main function that stars the shell (shell skeleton)
+.I $HOME/.simple_shell_history
+The \fBsimple_shell\fP history file
+.PD
+
+.SH AUTHORS
+Bezaleel Olakunori, ALX
+.br
+bezaleeloci@gmail.com
+.PP
+Elmahdi Mamoun, ALX
+.br
+mamounelmahdi1962@gmail.com
 
 .SH SEE ALSO
-chdir (2), close (2), execve (2), exit (3), fflush (3), fork (2), free (3), getcwd (3), getline (3), malloc (3), open (2), read (2), stat (2), signal (2), strtok (3), wait (2), waitpid (2), write (2).
+.PD 0
+.TP
+\fIsh\fP(1), \fIbash\fP(1), \fIksh\fP(1), \fIcsh\fP(1)
+.PD
 
-.SH BUGS
-Not yet.
+.SH BUG REPORTS
+Report
+.SB simple_shell
+bugs to <https://github.com/Elmahdi1962/simple_shell/issues>
 
-.SH AUTHOR
-Written by Kudakwashe Rapozo and Emmanuel Mwangi
