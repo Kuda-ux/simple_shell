@@ -12,7 +12,7 @@ The purpose of this project was to demonstrate our ([Emmanuel Mwangi](https://gi
 
 Here's a screenshot of our simple shell in action.
 
-<img src="./readme/img-0.png"/>
+<img src="./readme/shell.png"/>
 
 ## How To Use
 
