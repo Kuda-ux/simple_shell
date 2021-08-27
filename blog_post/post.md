@@ -46,6 +46,6 @@ After resolving the command to a path the shell just needs to execute the expect
 
 To prevent the shell from terminating after executing the file using the **execve()** system call, the shell has to fork its current process and wait for the child process to terminate or finish executing. The fork and wait can be done using the **fork()** and **wait()** system calls. The shell can check if the child process failed (it wouldn't return if it succeeded) and retrieve the exit status using the WIFEXITED and WEXITSTATUS macros. A successfully executed file has an exit status of 0.
 
-You can find the entire source code of the shell we made [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FElmahdi1962%2Fsimple_shell) on GitHub. The shell performs some simple operations you would expect a shell to perform. It runs some built-in commands, performs variable expansions, executes programs and can read lines of commands from a text file.
+You can find the entire source code of the shell we made [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FKuda-ux%2Fsimple_shell) on GitHub. The shell performs some simple operations you would expect a shell to perform. It runs some built-in commands, performs variable expansions, executes programs and can read lines of commands from a text file.
 
 I hope this has given you a piece of short information on what you need to know before creating your own shell.
