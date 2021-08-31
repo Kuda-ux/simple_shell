@@ -4,13 +4,12 @@
 ![Code size](https://img.shields.io/github/languages/code-size/Kuda-ux/simple_shell.svg)
 
 ## Description
+Implementation of a simple Unix shell in __C__ using the `gnu89` standard.
 
-This program is a simple Unix shell implemented in __C__ using the `gnu89` standard.
-
-The purpose of this project was to demonstrate our ([Emmanuel Mwangi](https://github.com/Emmanuel-Munubi) & [Kudakwashe Rapozo](https://github.com/Kuda-ux)) understanding of a variety of programming concepts and low-level system functionalities.
+This project aims to demonstrate that [Emmanuel Mwangi](https://github.com/Emmanuel-Munubi) & [Kudakwashe Rapozo](https://github.com/Kuda-ux) understand of a variety of programming concepts and low-level system functionalities.
 <br/>
 
-Here's a screenshot of our simple shell in action.
+Embedded here is a screenshot of the simple shell in action.
 
 <img src="./readme/shell.png"/>
 
